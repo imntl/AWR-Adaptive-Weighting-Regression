@@ -111,7 +111,7 @@ class Trainer(object):
 
         eval_tool = EvalUtil(self.testData.img_size, self.testData.paras, self.testData.flip, self.testData.jt_num)
         loss_meter = meter.AverageValueMeter()
-        for ii, (img, jt_xyz_gt, jt_uvd_gt, center_xyz, M, cube) in tqdm(enumerate(self.testLoader)):
+        for ii, (img, jt_xyz_gt, jt_uvd_gt, center_xyz, M, cube) in enumerate(tqdm(self.testLoader)):
 
             input = img.cuda()
             loss = 0
