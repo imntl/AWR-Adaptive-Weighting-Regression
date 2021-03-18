@@ -19,7 +19,7 @@ class Config(object):
     downsample = 2 # [1,2,4]
     img_size = 128
     batch_size = 16
-    num_workers = 0
+    num_workers = 4
     max_epoch = 80
     loss_type = 'MyL1Loss'
     dense_weight = 1.
