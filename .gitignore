@@ -1,3 +1,6 @@
 debug/
 *.pyc
 output/
+data/nyu/test
+data/nyu/train
+venv/
