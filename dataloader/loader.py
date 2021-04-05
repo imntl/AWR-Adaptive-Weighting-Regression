@@ -1,7 +1,7 @@
 from torch.utils.data import Dataset 
 import numpy as np
 import cv2
-from util.util import uvd2xyz, xyz2uvd
+from ..util.util import uvd2xyz, xyz2uvd
 from scipy.sparse import coo_matrix
 
 class Loader(Dataset):

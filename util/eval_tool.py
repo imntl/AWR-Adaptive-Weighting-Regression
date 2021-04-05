@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from util.util import uvd2xyz
+from .util import uvd2xyz
+
 
 class EvalUtil:
     """ Util class for evaluation networks.
@@ -17,7 +18,14 @@ class EvalUtil:
         for _ in range(num_kp):
             self.data.append(list())
 
-    def feed(self, jt_uvd_pred, jt_xyz_gt, center_xyz, M, cube, jt_vis=0, skip_check=False):
+    def feed(self,
+             jt_uvd_pred,
+             jt_xyz_gt,
+             center_xyz,
+             M,
+             cube,
+             jt_vis=0,
+             skip_check=False):
         """ Used to feed data to the class. Stores the euclidean distance between gt and pred, when it is visible. """
         if not skip_check:
             jt_uvd_pred = np.squeeze(jt_uvd_pred).astype(np.float32)
@@ -37,7 +45,9 @@ class EvalUtil:
 
         jt_uvd_pred[:, :2] = (jt_uvd_pred[:, :2] + 1) * self.img_size / 2.
         jt_uvd_pred[:, 2] = jt_uvd_pred[:, 2] * cube[2] / 2. + center_xyz[2]
-        jt_uvd_trans = np.hstack([jt_uvd_pred[:, :2], np.ones((jt_uvd_pred.shape[0], 1))])
+        jt_uvd_trans = np.hstack(
+            [jt_uvd_pred[:, :2],
+             np.ones((jt_uvd_pred.shape[0], 1))])
         jt_uvd_pred[:, :2] = np.dot(M_inv, jt_uvd_trans.T).T[:, :2]
         self.jt_uvd_pred.append(jt_uvd_pred)
         jt_xyz_pred = uvd2xyz(jt_uvd_pred, self.paras, self.flip)
@@ -56,7 +66,6 @@ class EvalUtil:
             else:
                 if jt_vis[i]:
                     self.data[i].append(euclidean_dist[i])
-
 
     def _get_pck(self, kp_id, threshold):
         """ Returns pck for one keypoint for the given threshold. """
@@ -118,7 +127,8 @@ class EvalUtil:
         epe_median_all = np.mean(np.array(epe_median_all))
         # area under pck curve
         auc_all = np.mean(np.array(auc_all))
-        pck_curve_all = np.mean(np.array(pck_curve_all), 0)  # mean only over keypoints
+        pck_curve_all = np.mean(np.array(pck_curve_all),
+                                0)  # mean only over keypoints
         return epe_mean_all, epe_median_all, auc_all, pck_curve_all, thresholds
 
     def plot_pck(self, path, pck_curve_all, thresholds):
@@ -133,4 +143,3 @@ class EvalUtil:
         # plt.tight_layout(rect=(0.01, -0.05, 1.03, 1.03))
         plt.savefig(path)
         plt.close()
-
